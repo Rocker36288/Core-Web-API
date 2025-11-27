@@ -1,0 +1,32 @@
+﻿<button id="getGreet" class="btn btn-primary">Greet(Get)</button>
+<img id="progress" src="~/images/takodacji.gif" style="display:none"/>
+<div id="result"></div>
+
+@section Scripts
+{
+    <script>
+            var baseAddress="https://localhost:7015";   //Developing(Server位址)
+            // var baseAddress="https:xxx";             //Staging
+            // var baseAddress="https:yyyyy";           //Production: 客戶、企業、雲端
+
+
+        $("#getGreet").on("click",function(){
+            // alert("getGreet");
+            var p=encodeURI("Name=貓貓")
+            $("#progress").show();
+            fetch(`${baseAddress}/Ajax/Greet?${p}`,{
+                method:"GET"
+            }).then(response=>{
+                $("#progress").hide();
+                if(response.ok){
+                    return response.text();
+                }
+            }).then(data=>{
+                $("#result").text(data);
+            }).catch(err=>{
+                alert(err.message);
+            });
+        });
+
+    </script>
+}

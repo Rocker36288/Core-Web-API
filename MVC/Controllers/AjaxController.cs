@@ -15,6 +15,7 @@ namespace MVC.Controllers
         [HttpGet]
         public string Greet(string Name)
         {
+            Thread.Sleep(3000);
             return $"Hello, {Name}!";
         }
         //POST: Ajax/PostGreet
@@ -26,6 +27,13 @@ namespace MVC.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+        //POST: Ajax/CheckName
+        [HttpPost]
+        public string CheckName(string ContactName)
+        {
+            bool Exists = _context.Customers.Any(e => e.ContactName == ContactName);
+            return Exists ? "true" : "false";
         }
     }
 }

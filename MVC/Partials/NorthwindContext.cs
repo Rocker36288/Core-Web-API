@@ -1,0 +1,18 @@
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace MVC.Models
+{
+    public partial class NorthwindContext : DbContext
+    {
+
+        public NorthwindContext() { }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured) 
+            {
+                IConfigurationRoot config=new ConfigurationBuilder().SetBasePath(AppDomain.CurrentDomain.BaseDirectory).AddJsonFile("appsettings.json").Build();
+                optionsBuilder.UseSqlServer(config.GetConnectionString("Northwind"));
+            }
+        }
+    }
+}
