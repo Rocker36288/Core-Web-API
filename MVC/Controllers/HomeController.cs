@@ -28,6 +28,12 @@ namespace MVC.Controllers
         {
             return View();
         }
+        //GET: Home/FetchCheckName
+        [HttpGet]
+        public IActionResult FetchCheckName()
+        {
+            return View();
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

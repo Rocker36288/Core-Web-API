@@ -13,7 +13,7 @@
 
         $("#getGreet").on("click",async function(){
             // alert("getGreet");
-            var p=encodeURI("Name=貓貓")
+            var p=encodeURI("Name=貓貓")  //重新編碼後附加到URL
             $("#result").text("");
             $("#progress").show();
             // fetch(`${baseAddress}/Ajax/Greet?${p}`,{
@@ -47,7 +47,7 @@
 
         $("#postGreet").on("click",async ()=>{
             try{
-                var data = new FormData();
+                var data = new FormData();  //模擬 HTML 表單提交
                 data.append("Name","破貓");
                 $("#result").text("");
                 $("#progress").show();
