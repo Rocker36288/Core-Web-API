@@ -10,23 +10,38 @@
             // var baseAddress="https:yyyyy";           //Production: 客戶、企業、雲端
 
 
-        $("#getGreet").on("click",function(){
+        $("#getGreet").on("click",async function(){
             // alert("getGreet");
             var p=encodeURI("Name=貓貓")
             $("#result").text("");
             $("#progress").show();
-            fetch(`${baseAddress}/Ajax/Greet?${p}`,{
-                method:"GET"
-            }).then(response=>{
-                $("#progress").hide();
+            // fetch(`${baseAddress}/Ajax/Greet?${p}`,{
+            //     method:"GET"
+            // }).then(response=>{
+            //     $("#progress").hide();
+            //     if(response.ok){
+            //         return response.text();
+            //     }
+            // }).then(data=>{
+            //     $("#result").text(data);
+            // }).catch(err=>{
+            //     alert(err.message);
+            // });
+
+            try{
+                var response = await fetch(`${baseAddress}/Ajax/Greet?${p}`,{
+                method:"GET",
+                });
                 if(response.ok){
-                    return response.text();
+                    $("#progress").hide();
+                    var data = await response.text();
+                    $("#result").text(data);
                 }
-            }).then(data=>{
-                $("#result").text(data);
-            }).catch(err=>{
-                alert(err.message);
-            });
+            }
+            catch(err){
+                $("#progress").hide();
+                alert(err.message)
+            }
         });
 
     </script>
