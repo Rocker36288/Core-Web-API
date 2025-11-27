@@ -13,6 +13,7 @@
         $("#getGreet").on("click",function(){
             // alert("getGreet");
             var p=encodeURI("Name=貓貓")
+            $("#result").text("");
             $("#progress").show();
             fetch(`${baseAddress}/Ajax/Greet?${p}`,{
                 method:"GET"
