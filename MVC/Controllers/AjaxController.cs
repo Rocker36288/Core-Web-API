@@ -15,13 +15,14 @@ namespace MVC.Controllers
         [HttpGet]
         public string Greet(string Name)
         {
-            Thread.Sleep(3000);
+            Thread.Sleep(2000);
             return $"Hello, {Name}!";
         }
         //POST: Ajax/PostGreet
         [HttpPost]
         public string PostGreet(string Name)
         {
+            Thread.Sleep(2000);
             return $"Hello, {Name}!";
         }
         public IActionResult Index()

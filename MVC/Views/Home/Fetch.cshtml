@@ -1,4 +1,5 @@
 ﻿<button id="getGreet" class="btn btn-primary">Greet(Get)</button>
+<button id="postGreet" class="btn btn-primary">Greet(Post)</button>
 <img id="progress" src="~/images/takodacji.gif" style="display:none"/>
 <div id="result"></div>
 
@@ -43,6 +44,28 @@
                 alert(err.message)
             }
         });
+
+        $("#postGreet").on("click",async ()=>{
+            try{
+                var data = new FormData();
+                data.append("Name","破貓");
+                $("#result").text("");
+                $("#progress").show();
+                var response = await fetch(`${baseAddress}/Ajax/PostGreet`,{
+                    method:"POST",
+                    body:data
+                });
+                if(response.ok){
+                    $("#progress").hide();
+                    var data = await response.text();
+                    $("#result").text(data);
+                }
+            }
+            catch(err){
+                $("#progress").hide();
+                alert(err.message);
+            }
+        })
 
     </script>
 }
