@@ -1,1 +1,41 @@
-﻿FetchCheckName
+﻿<div class="container col-6 py-5">
+    <h3 class="mb-3 text-center">查詢聯絡人</h3>
+    <div class="form-floating mb-3">
+        <input id="contactName" class="form-control" placeholder="" />
+        <label class="form-label">聯絡人姓名</label>
+    </div>
+    <div class="mb-3">
+        <div id="result"></div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var baseAddress="https://localhost:7015";   //Developing(Server位址)
+        // var baseAddress="https:xxx";             //Staging
+        // var baseAddress="https:yyyyy";           //Production: 客戶、企業、雲端
+        $("#contactName").on("keyup",async ()=>{
+            // alert("keyup");
+            try{
+                var form = new FormData();
+                form.append("ContactName", $("#contactName").val());
+                var response = await fetch(`${baseAddress}/Ajax/CheckName`,{
+                    method:"POST",
+                    body:form
+                });
+                if(response.ok){
+                    var data = await response.text();
+                    if(data =="true"){
+                        $("#result").text("查有此人").removeClass("text-danger").addClass("text-success");
+                    }
+                    else{
+                        $("#result").text("查無此人").removeClass("text-success").addClass("text-danger");
+                    }
+                }
+            }
+            catch(err){
+                alert(err.message);
+            }
+        })
+    </script>
+}
