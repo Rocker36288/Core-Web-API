@@ -25,7 +25,8 @@ namespace WebAPI.Controllers
         [HttpGet]
         public async Task<IEnumerable<EmployeeDTO>> GetEmployees()
         {
-            return _context.Employees.Select(e => new EmployeeDTO {
+            return _context.Employees.Select(e => new EmployeeDTO
+            {
                 EmployeeId = e.EmployeeId,
                 FirstName = e.FirstName,
                 LastName = e.LastName,
@@ -57,38 +58,46 @@ namespace WebAPI.Controllers
         // PUT: api/Employees/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutEmployee(int id, Employee employee)
+        public async Task<ResultDTO> PutEmployee(int id, EmployeeDTO employeeDTO)
         {
-            if (id != employee.EmployeeId)
+            if (id != employeeDTO.EmployeeId)
             {
-                return BadRequest();
+                return new ResultDTO { OK = false, Code = 400 };    //BadRequest
             }
-
-            _context.Entry(employee).State = EntityState.Modified;
-
-            try
+            Employee? Emp = await _context.Employees.FindAsync(id);
+            if (Emp == null)
             {
-                await _context.SaveChangesAsync();
+                return new ResultDTO { OK = false, Code = 404 };
             }
-            catch (DbUpdateConcurrencyException)
+            else
             {
-                if (!EmployeeExists(id))
+                Emp.LastName = employeeDTO.LastName;
+                Emp.FirstName = employeeDTO.FirstName;
+                Emp.Title = employeeDTO.Title;
+                _context.Entry(Emp).State = EntityState.Modified;
+                try
                 {
-                    return NotFound();
+                    await _context.SaveChangesAsync();
                 }
-                else
+                catch (DbUpdateConcurrencyException)
                 {
-                    throw;
+                    if (!EmployeeExists(id))
+                    {
+                        return new ResultDTO { OK = false, Code = 404 };    //NotFound
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
             }
-
-            return NoContent();
+            return new ResultDTO { OK = true, Code = 204 };     //NoContent
         }
 
         // POST: api/Employees
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<EmployeeDTO> PostEmployee(EmployeeDTO employeeDTO)
+        public async Task<ResultDTO> PostEmployee(EmployeeDTO employeeDTO)
         {
             Employee Emp = new Employee
             {
@@ -96,11 +105,14 @@ namespace WebAPI.Controllers
                 FirstName = employeeDTO.FirstName,
                 Title = employeeDTO.Title,
             };
-            
+
             _context.Employees.Add(Emp);
             await _context.SaveChangesAsync();
-            employeeDTO.EmployeeId = Emp.EmployeeId;
-            return employeeDTO;
+            return new ResultDTO
+            {
+                OK = true,
+                Code = 200, 
+            };
         }
 
         // DELETE: api/Employees/5
