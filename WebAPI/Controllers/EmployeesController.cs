@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using WebAPI.DTO;
 using WebAPI.Models;
 
 namespace WebAPI.Controllers
@@ -22,23 +23,35 @@ namespace WebAPI.Controllers
 
         // GET: api/Employees
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Employee>>> GetEmployees()
+        public async Task<IEnumerable<EmployeeDTO>> GetEmployees()
         {
-            return _context.Employees;
+            return _context.Employees.Select(e => new EmployeeDTO {
+                EmployeeId = e.EmployeeId,
+                FirstName = e.FirstName,
+                LastName = e.LastName,
+                Title = e.Title,
+            });
         }
 
         // GET: api/Employees/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Employee>> GetEmployee(int id)
+        public async Task<ActionResult<EmployeeDTO>> GetEmployee(int id)
         {
             var employee = await _context.Employees.FindAsync(id);
+            EmployeeDTO EmpDTO = new EmployeeDTO
+            {
+                EmployeeId = employee.EmployeeId,
+                FirstName = employee.FirstName,
+                LastName = employee.LastName,
+                Title = employee.Title,
 
+            };
             if (employee == null)
             {
                 return NotFound();
             }
 
-            return employee;
+            return EmpDTO;
         }
 
         // PUT: api/Employees/5
