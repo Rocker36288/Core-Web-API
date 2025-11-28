@@ -88,12 +88,19 @@ namespace WebAPI.Controllers
         // POST: api/Employees
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Employee>> PostEmployee(Employee employee)
+        public async Task<EmployeeDTO> PostEmployee(EmployeeDTO employeeDTO)
         {
-            _context.Employees.Add(employee);
+            Employee Emp = new Employee
+            {
+                LastName = employeeDTO.LastName,
+                FirstName = employeeDTO.FirstName,
+                Title = employeeDTO.Title,
+            };
+            
+            _context.Employees.Add(Emp);
             await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetEmployee", new { id = employee.EmployeeId }, employee);
+            employeeDTO.EmployeeId = Emp.EmployeeId;
+            return employeeDTO;
         }
 
         // DELETE: api/Employees/5
