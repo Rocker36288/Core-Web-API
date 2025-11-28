@@ -40,5 +40,11 @@ namespace MVC.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+        //GET: Home/FetchWebApi
+        [HttpGet]
+        public IActionResult FetchWebApi()
+        {
+            return View();
+        }
     }
 }

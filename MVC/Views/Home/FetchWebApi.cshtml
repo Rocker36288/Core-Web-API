@@ -1,0 +1,26 @@
+﻿<button id="getEmployees" class="btn btn-success">GetEmployees</button>
+
+@section Scripts
+{
+    <script>
+        var baseAddress="https://localhost:7035";
+
+        $("#getEmployees").on("click", async ()=>{
+            // alert("getEmployees");
+            try
+            {
+                var response = await fetch(`${baseAddress}/api/Employees`,{
+                    method:"GET"
+                });
+                if(response.ok){
+                    var data = await response.json();
+                    alert(data);
+                }
+            }
+            catch(err){
+                alert(err.message);
+            }
+        });
+
+    </script>
+}
