@@ -90,8 +90,8 @@ namespace WebAPI.Controllers
                         throw;
                     }
                 }
+                return new ResultDTO { OK = true, Code = 204 };     //NoContent
             }
-            return new ResultDTO { OK = true, Code = 204 };     //NoContent
         }
 
         // POST: api/Employees
@@ -111,24 +111,30 @@ namespace WebAPI.Controllers
             return new ResultDTO
             {
                 OK = true,
-                Code = 200, 
+                Code = 200,
             };
         }
 
         // DELETE: api/Employees/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteEmployee(int id)
+        public async Task<ResultDTO> DeleteEmployee(int id)
         {
             var employee = await _context.Employees.FindAsync(id);
             if (employee == null)
             {
-                return NotFound();
+                return new ResultDTO { OK = false, Code = 404 };  //NotFound();
             }
+            try
+            {
+                _context.Employees.Remove(employee);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                return new ResultDTO { OK = false, Code = 500 };    //Internal Server Error
+            }
+            return new ResultDTO { OK = true, Code = 204 };    //NoContent();
 
-            _context.Employees.Remove(employee);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
         }
 
         private bool EmployeeExists(int id)
